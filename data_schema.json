@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "nume": { "type": "string" },
+    "specie": { "type": "string" },
+    "inaltime": { "type": "number", "minimum": 0 },
+    "diametru": { "type": "number", "minimum": 0 },
+    "tip": {
+      "type": "string",
+      "enum": ["foios", "rasinos", "exotic"]
+    }
+  },
+  "required": ["nume", "specie", "inaltime", "diametru", "tip"]
+}
