@@ -2,68 +2,80 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fișe Arboret – PWA</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <title>Fișe Arboret din Excel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f8f5;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      color: #2e8b57;
-      margin-bottom: 10px;
-    }
-    p {
-      color: #444;
-      margin-bottom: 30px;
-    }
-    .btn {
-      display: block;
-      width: 80%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 15px;
-      font-size: 16px;
-      background: #2e8b57;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .btn:hover {
-      background: #246b45;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #888;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f8f5; }
+    h2 { color: #2e8b57; }
+    input, button { padding: 10px; margin: 10px 0; width: 100%; max-width: 400px; }
+    button { background: #2e8b57; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #246b45; }
+    #status { margin-top: 10px; color: #444; }
   </style>
 </head>
 <body>
 
-  <h1>🌲 Fișe Arboret</h1>
-  <p>Alege modulul dorit pentru teren sau birou</p>
+  <h2>📤 Încarcă fișier Excel</h2>
+  <input type="file" id="excelInput" accept=".xlsx,.xls">
+  <div id="status">Nicio încărcare</div>
 
-  <button class="btn" onclick="location.href='teren.html'">📱 Versiune Teren</button>
-  <button class="btn" onclick="location.href='birou.html'">🖥️ Versiune Birou</button>
-
-  <footer>
-    Aplicație PWA – funcționează offline după instalare<br>
-    Creat cu drag pentru silvicultori 💚
-  </footer>
+  <h2>🔍 Introdu cod UA</h2>
+  <input type="text" id="uaInput" placeholder="Ex: 123A">
+  <button onclick="genereazaFisa()">📄 Generează fișă PDF</button>
 
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(() => console.log("✅ Service Worker activat"))
-        .catch(err => console.error("❌ Eroare Service Worker:", err));
+    let dateExcel = [];
+
+    document.getElementById("excelInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        dateExcel = XLSX.utils.sheet_to_json(sheet);
+        document.getElementById("status").textContent = `✅ Fișier încărcat: ${file.name}`;
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    async function genereazaFisa() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const codUA = document.getElementById("uaInput").value.trim();
+
+      if (!codUA) {
+        alert("⚠️ Introdu un cod UA!");
+        return;
+      }
+
+      const rand = dateExcel.find(r => r.UA?.toString().trim() === codUA);
+      if (!rand) {
+        alert(`❌ Cod UA "${codUA}" nu a fost găsit în Excel.`);
+        return;
+      }
+
+      const fisa = `
+──────────────────────────────────────────────
+🧾 Fișă UA: ${rand.UA}
+──────────────────────────────────────────────
+🏢 ADM: ${rand.ADM || "-"}
+🌲 Specie: ${rand.Specie || "-"}
+📅 Vârstă: ${rand.Vârstă || "-"} ani
+📏 Diametru: ${rand.Diametru || "-"} cm
+📐 Înălțime: ${rand.Înălțime || "-"} m
+🌱 Proveniență: ${rand.Proveniență || "-"}
+💚 Vitalitate: ${rand.Vitalitate || "-"}
+🎯 Țel gospodărire: ${rand["Țel gospodărire"] || "-"}
+🌍 Drum: ${rand.Drum || "-"}
+⚠️ Condiții: ${rand.Condiții || "-"}
+──────────────────────────────────────────────
+`;
+
+      doc.text(fisa.trim(), 10, 10);
+      doc.save(`Fisa_${codUA}.pdf`);
     }
   </script>
 
