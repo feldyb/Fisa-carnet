@@ -43,6 +43,7 @@
     cursor: pointer;
     flex: 1 1 80px;
     text-align: center;
+    user-select: none;
   }
   .btn:active {
     background-color: #1c3d81;
@@ -54,7 +55,7 @@
     background-color: #f8faff; /* alb cu albastru foarte deschis */
   }
   th, td {
-    border: 1px solid #aab8e0;/* chenare albastre */
+    border: 1px solid #aab8e0; /* chenare albastre */
     padding: 6px 8px;
     text-align: center;
     font-size: 14px;
@@ -97,10 +98,10 @@
 
   <!-- Butoane sus din poza -->
   <div class="top-buttons">
-    <button class="btn">Adaugă</button>
-    <button class="btn">Șterge</button>
-    <button class="btn">Curăță</button>
-    <button class="btn">Export Excel</button>
+    <button class="btn" id="btnAdauga">Adaugă</button>
+    <button class="btn" id="btnSterge">Șterge</button>
+    <button class="btn" id="btnCurata">Curăță</button>
+    <button class="btn" id="btnExport">Export Excel</button>
   </div>
 
   <!-- Tabel cu coloane ca în poza ta -->
@@ -129,9 +130,95 @@
   </table>
 
   <div class="footer-controls">
-    <!-- Mesaj / stare export / altele -->
     <small>Preview aplicație silvică design 1:1</small>
   </div>
 </div>
+
+<script>
+  // Select elemente din DOM
+  const tbody = document.getElementById('tree-data');
+  const btnAdauga = document.getElementById('btnAdauga');
+  const btnSterge = document.getElementById('btnSterge');
+  const btnCurata = document.getElementById('btnCurata');
+  const btnExport = document.getElementById('btnExport');
+
+  // Funcție pentru actualizarea numerotării rândurilor
+  function actualizeazaNumarare() {
+    Array.from(tbody.rows).forEach((row, index) => {
+      row.cells[0].textContent = index + 1;
+    });
+  }
+
+  // Adaugă un rând nou gol cu câmpurile de input
+  btnAdauga.addEventListener('click', () => {
+    const tr = document.createElement('tr');
+    const nr = tbody.rows.length + 1;
+    tr.innerHTML = `
+      <td>${nr}</td>
+      <td><input type="text" value="" placeholder="Specie" /></td>
+      <td><input type="number" value="" placeholder="Diametru" /></td>
+      <td><input type="number" value="" placeholder="Înălțime" /></td>
+      <td><input type="number" value="" step="0.01" placeholder="Volum" /></td>
+      <td><input type="text" value="" placeholder="Alte info" /></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Șterge ultimul rând din tabel (dacă există)
+  btnSterge.addEventListener('click', () => {
+    if (tbody.rows.length > 0) {
+      tbody.deleteRow(tbody.rows.length -1);
+      actualizeazaNumarare();
+    }
+  });
+
+  // Curăță toate câmpurile din tabel dar păstrează rândurile
+  btnCurata.addEventListener('click', () => {
+    Array.from(tbody.rows).forEach(row => {
+      Array.from(row.cells).forEach(cell => {
+        const input = cell.querySelector('input');
+        if (input) input.value = '';
+      });
+    });
+  });
+
+  // Funcție simplă de export Excel CSV
+  btnExport.addEventListener('click', () => {
+    let csvContent = "data:text/csv;charset=utf-8,";
+
+    // Titluri coloane
+    let headers = [];
+    tbody.parentElement.querySelectorAll('thead th').forEach(th => {
+      headers.push(th.textContent.trim());
+    });
+    csvContent += headers.join(",") + "\r\n";
+
+    // Date rânduri
+    Array.from(tbody.rows).forEach(row => {
+      let rowData = [];
+      Array.from(row.cells).forEach((cell, i) => {
+        if(i === 0) {
+          rowData.push(cell.textContent.trim()); // Nr
+        } else {
+          const input = cell.querySelector('input');
+          rowData.push(input ? input.value.trim() : cell.textContent.trim());
+        }
+      });
+      csvContent += rowData.join(",") + "\r\n";
+    });
+
+    // Creare link descărcare
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g,"-");
+    link.setAttribute("download", `forest_data_${timestamp}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+</script>
+
 </body>
-</html>
+  </html>
+  
