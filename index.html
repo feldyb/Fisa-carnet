@@ -1,224 +1,71 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Aplicație Silvică - Preview</title>
-<style>
-  /* Culori din poza ta */
-  body {
-    margin: 0; padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #c0cce7; /* fundal deschis albastru gri */
-    color: #000;
-  }
-  header {
-    background-color: #0f3460; /* albastru închis */
-    padding: 10px 5px;
-    color: white;
-    text-align: center;
-  }
-  /* Container general */
-  .app-container {
-    max-width: 960px;
-    margin: auto;
-    background-color: #e6ebf7; /* fundal tabel/conținut principal */
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  /* Butoane rapide sus, grupate, ca în poza */
-  .top-buttons {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-  }
-  .btn {
-    background-color: #2a52be; /* albastru intens */
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    flex: 1 1 80px;
-    text-align: center;
-    user-select: none;
-  }
-  .btn:active {
-    background-color: #1c3d81;
-  }
-  /* Tabelul principal */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #f8faff; /* alb cu albastru foarte deschis */
-  }
-  th, td {
-    border: 1px solid #aab8e0; /* chenare albastre */
-    padding: 6px 8px;
-    text-align: center;
-    font-size: 14px;
-    vertical-align: middle;
-  }
-  th {
-    background-color: #a4b0e6;
-    color: #0f1a4d;
-    font-weight: bold;
-  }
-  /* Linii rânduri */
-  tbody tr:nth-child(even) {
-    background-color: #dde3f0;
-  }
-  /* Inputuri în celule */
-  input[type="text"], input[type="number"] {
-    width: 100%;
-    box-sizing: border-box;
-    border: none;
-    background: transparent;
-    text-align: center;
-    font-size: 14px;
-  }
-  input[type="text"]:focus, input[type="number"]:focus {
-    outline: none;
-    background-color: #d2dafa;
-  }
-  /* Footer cu export */
-  .footer-controls {
-    margin-top: 12px;
-    text-align: right;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fișe Arboret – PWA</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f8f5;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #2e8b57;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #444;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 16px;
+      background: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #246b45;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h2>Aplicație Silvică - Preview</h2>
-</header>
-<div class="app-container">
 
-  <!-- Butoane sus din poza -->
-  <div class="top-buttons">
-    <button class="btn" id="btnAdauga">Adaugă</button>
-    <button class="btn" id="btnSterge">Șterge</button>
-    <button class="btn" id="btnCurata">Curăță</button>
-    <button class="btn" id="btnExport">Export Excel</button>
-  </div>
+  <h1>🌲 Fișe Arboret</h1>
+  <p>Alege modulul dorit pentru teren sau birou</p>
 
-  <!-- Tabel cu coloane ca în poza ta -->
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Specie</th>
-        <th>Diametru (cm)</th>
-        <th>Înălțime (m)</th>
-        <th>Volum (m³)</th>
-        <th>Alte câmpuri</th>
-      </tr>
-    </thead>
-    <tbody id="tree-data">
-      <!-- Rânduri de test -->
-      <tr>
-        <td>1</td>
-        <td><input type="text" value="Molid" /></td>
-        <td><input type="number" value="30" /></td>
-        <td><input type="number" value="15" /></td>
-        <td><input type="number" value="0.5" step="0.01" /></td>
-        <td><input type="text" value="Info" /></td>
-      </tr>
-    </tbody>
-  </table>
+  <button class="btn" onclick="location.href='teren.html'">📱 Versiune Teren</button>
+  <button class="btn" onclick="location.href='birou.html'">🖥️ Versiune Birou</button>
 
-  <div class="footer-controls">
-    <small>Preview aplicație silvică design 1:1</small>
-  </div>
-</div>
+  <footer>
+    Aplicație PWA – funcționează offline după instalare<br>
+    Creat cu drag pentru silvicultori 💚
+  </footer>
 
-<script>
-  // Select elemente din DOM
-  const tbody = document.getElementById('tree-data');
-  const btnAdauga = document.getElementById('btnAdauga');
-  const btnSterge = document.getElementById('btnSterge');
-  const btnCurata = document.getElementById('btnCurata');
-  const btnExport = document.getElementById('btnExport');
-
-  // Funcție pentru actualizarea numerotării rândurilor
-  function actualizeazaNumarare() {
-    Array.from(tbody.rows).forEach((row, index) => {
-      row.cells[0].textContent = index + 1;
-    });
-  }
-
-  // Adaugă un rând nou gol cu câmpurile de input
-  btnAdauga.addEventListener('click', () => {
-    const tr = document.createElement('tr');
-    const nr = tbody.rows.length + 1;
-    tr.innerHTML = `
-      <td>${nr}</td>
-      <td><input type="text" value="" placeholder="Specie" /></td>
-      <td><input type="number" value="" placeholder="Diametru" /></td>
-      <td><input type="number" value="" placeholder="Înălțime" /></td>
-      <td><input type="number" value="" step="0.01" placeholder="Volum" /></td>
-      <td><input type="text" value="" placeholder="Alte info" /></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  // Șterge ultimul rând din tabel (dacă există)
-  btnSterge.addEventListener('click', () => {
-    if (tbody.rows.length > 0) {
-      tbody.deleteRow(tbody.rows.length -1);
-      actualizeazaNumarare();
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(() => console.log("✅ Service Worker activat"))
+        .catch(err => console.error("❌ Eroare Service Worker:", err));
     }
-  });
-
-  // Curăță toate câmpurile din tabel dar păstrează rândurile
-  btnCurata.addEventListener('click', () => {
-    Array.from(tbody.rows).forEach(row => {
-      Array.from(row.cells).forEach(cell => {
-        const input = cell.querySelector('input');
-        if (input) input.value = '';
-      });
-    });
-  });
-
-  // Funcție simplă de export Excel CSV
-  btnExport.addEventListener('click', () => {
-    let csvContent = "data:text/csv;charset=utf-8,";
-
-    // Titluri coloane
-    let headers = [];
-    tbody.parentElement.querySelectorAll('thead th').forEach(th => {
-      headers.push(th.textContent.trim());
-    });
-    csvContent += headers.join(",") + "\r\n";
-
-    // Date rânduri
-    Array.from(tbody.rows).forEach(row => {
-      let rowData = [];
-      Array.from(row.cells).forEach((cell, i) => {
-        if(i === 0) {
-          rowData.push(cell.textContent.trim()); // Nr
-        } else {
-          const input = cell.querySelector('input');
-          rowData.push(input ? input.value.trim() : cell.textContent.trim());
-        }
-      });
-      csvContent += rowData.join(",") + "\r\n";
-    });
-
-    // Creare link descărcare
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g,"-");
-    link.setAttribute("download", `forest_data_${timestamp}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-</script>
+  </script>
 
 </body>
-  </html>
-  
+</html>
