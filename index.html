@@ -1,37 +1,137 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formular Silvic</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aplicație Silvică - Preview</title>
+<style>
+  /* Culori din poza ta */
+  body {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #c0cce7; /* fundal deschis albastru gri */
+    color: #000;
+  }
+  header {
+    background-color: #0f3460; /* albastru închis */
+    padding: 10px 5px;
+    color: white;
+    text-align: center;
+  }
+  /* Container general */
+  .app-container {
+    max-width: 960px;
+    margin: auto;
+    background-color: #e6ebf7; /* fundal tabel/conținut principal */
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  /* Butoane rapide sus, grupate, ca în poza */
+  .top-buttons {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    background-color: #2a52be; /* albastru intens */
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1 1 80px;
+    text-align: center;
+  }
+  .btn:active {
+    background-color: #1c3d81;
+  }
+  /* Tabelul principal */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f8faff; /* alb cu albastru foarte deschis */
+  }
+  th, td {
+    border: 1px solid #aab8e0;/* chenare albastre */
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  th {
+    background-color: #a4b0e6;
+    color: #0f1a4d;
+    font-weight: bold;
+  }
+  /* Linii rânduri */
+  tbody tr:nth-child(even) {
+    background-color: #dde3f0;
+  }
+  /* Inputuri în celule */
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 14px;
+  }
+  input[type="text"]:focus, input[type="number"]:focus {
+    outline: none;
+    background-color: #d2dafa;
+  }
+  /* Footer cu export */
+  .footer-controls {
+    margin-top: 12px;
+    text-align: right;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Formular Silvic</h1>
-    <form id="silvic-form">
-      <label for="nume">Nume:</label>
-      <input type="text" id="nume" name="nume" required />
+<header>
+  <h2>Aplicație Silvică - Preview</h2>
+</header>
+<div class="app-container">
 
-      <label for="specie">Specie:</label>
-      <input type="text" id="specie" name="specie" required />
-
-      <label for="inaltime">Înălțime (m):</label>
-      <input type="number" id="inaltime" name="inaltime" min="0" required />
-
-      <label for="diametru">Diametru (cm):</label>
-      <input type="number" id="diametru" name="diametru" min="0" required />
-
-      <label for="tip">Tip arbore:</label>
-      <select id="tip" name="tip">
-        <option value="foios">Foios</option>
-        <option value="rasinos">Rășinos</option>
-        <option value="exotic">Exotic</option>
-      </select>
-
-      <button type="submit">Salvează</button>
-    </form>
+  <!-- Butoane sus din poza -->
+  <div class="top-buttons">
+    <button class="btn">Adaugă</button>
+    <button class="btn">Șterge</button>
+    <button class="btn">Curăță</button>
+    <button class="btn">Export Excel</button>
   </div>
-  <script src="script.js"></script>
+
+  <!-- Tabel cu coloane ca în poza ta -->
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Specie</th>
+        <th>Diametru (cm)</th>
+        <th>Înălțime (m)</th>
+        <th>Volum (m³)</th>
+        <th>Alte câmpuri</th>
+      </tr>
+    </thead>
+    <tbody id="tree-data">
+      <!-- Rânduri de test -->
+      <tr>
+        <td>1</td>
+        <td><input type="text" value="Molid" /></td>
+        <td><input type="number" value="30" /></td>
+        <td><input type="number" value="15" /></td>
+        <td><input type="number" value="0.5" step="0.01" /></td>
+        <td><input type="text" value="Info" /></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-controls">
+    <!-- Mesaj / stare export / altele -->
+    <small>Preview aplicație silvică design 1:1</small>
+  </div>
+</div>
 </body>
 </html>
