@@ -1,14 +1,27 @@
-{
-  "type": "object",
-  "properties": {
-    "nume": { "type": "string" },
-    "specie": { "type": "string" },
-    "inaltime": { "type": "number", "minimum": 0 },
-    "diametru": { "type": "number", "minimum": 0 },
-    "tip": {
-      "type": "string",
-      "enum": ["foios", "rasinos", "exotic"]
-    }
-  },
-  "required": ["nume", "specie", "inaltime", "diametru", "tip"]
-}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Birou – Fișe Arboret</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>🖥️ Modul Birou</h2>
+  <label>Listă U.A.:</label>
+  <textarea id="listaUA" rows="4" placeholder="Ex: 123A, 124 A, 125A"></textarea>
+
+  <button onclick="genereazaFiseMultiple()">🧾 Generează fișe</button>
+  <button onclick="exportaPDF()">📄 Exportă PDF</button>
+  <button onclick="exportaExcel()">📊 Exportă Excel</button>
+
+  <div id="fisaUA" class="section" style="display:none;">
+    <pre id="fisaContent"></pre>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
