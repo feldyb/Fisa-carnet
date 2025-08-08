@@ -2,24 +2,107 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teren – Fișe Arboret</title>
+  <title>Fișă Teren</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header><h1>Mod Teren</h1></header>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="birou.html">Birou</a>
+  </nav>
 
-  <h2>📱 Modul Teren</h2>
-  <label>U.A.:</label>
-  <input type="text" id="uaID" placeholder="Ex: 123A, 4 A">
+  <div class="container">
+    <h2>Observații pe teren</h2>
 
-  <button onclick="genereazaFisaUA()">🧾 Generează fișă</button>
-  <button onclick="exportaPDF()">📄 Exportă PDF</button>
+    <label>Specie:</label>
+    <input type="text" id="specieTeren"><br><br>
 
-  <div id="fisaUA" class="section" style="display:none;">
-    <pre id="fisaContent"></pre>
+    <label>Diametru (cm):</label>
+    <input type="number" id="diametru"><br><br>
+
+    <label>Înălțime (m):</label>
+    <input type="number" id="inaltime"><br><br>
+
+    <label>Observații:</label><br>
+    <textarea id="observatii" rows="4" cols="40"></textarea><br><br>
+
+    <button onclick="getLocation()">📍 Preia locația</button>
+    <p id="locatie"></p>
+
+    <input type="file" accept="image/*" capture="environment"><br><br>
+
+    <button onclick="salveaza()">💾 Salvează</button>
+    <button onclick="exportPDF()">🧾 Export PDF</button>
+    <button onclick="exportExcel()">📊 Export Excel</button>
   </div>
 
-  <script src="app.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const lat = pos.coords.latitude.toFixed(5);
+          const lon = pos.coords.longitude.toFixed(5);
+          document.getElementById("locatie").textContent = `Lat: ${lat}, Lon: ${lon}`;
+        }, err => {
+          document.getElementById("locatie").textContent = "Locație indisponibilă.";
+        });
+      } else {
+        document.getElementById("locatie").textContent = "Geolocalizare neacceptată.";
+      }
+    }
+
+    function salveaza() {
+      const specie = document.getElementById("specieTeren").value;
+      const diametru = document.getElementById("diametru").value;
+      const inaltime = document.getElementById("inaltime").value;
+      const observatii = document.getElementById("observatii").value;
+      const locatie = document.getElementById("locatie").textContent;
+
+      const date = { specie, diametru, inaltime, observatii, locatie };
+      console.log("📋 Date salvate:", date);
+      alert("Datele au fost salvate local (simulat).");
+    }
+
+    async function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const specie = document.getElementById("specieTeren").value;
+      const diametru = document.getElementById("diametru").value;
+      const inaltime = document.getElementById("inaltime").value;
+      const observatii = document.getElementById("observatii").value;
+      const locatie = document.getElementById("locatie").textContent;
+
+      doc.text("Fișă Teren - Arboret", 10, 10);
+      doc.text(`Specie: ${specie}`, 10, 20);
+      doc.text(`Diametru: ${diametru} cm`, 10, 30);
+      doc.text(`Înălțime: ${inaltime} m`, 10, 40);
+      doc.text(`Observații: ${observatii}`, 10, 50);
+      doc.text(`Locație: ${locatie}`, 10, 60);
+
+      doc.save("fisa_teren.pdf");
+    }
+
+    function exportExcel() {
+      const specie = document.getElementById("specieTeren").value;
+      const diametru = document.getElementById("diametru").value;
+      const inaltime = document.getElementById("inaltime").value;
+      const observatii = document.getElementById("observatii").value;
+      const locatie = document.getElementById("locatie").textContent;
+
+      const ws_data = [
+        ["Specie", "Diametru (cm)", "Înălțime (m)", "Observații", "Locație"],
+        [specie, diametru, inaltime, observatii, locatie]
+      ];
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      XLSX.utils.book_append_sheet(wb, ws, "FisaTeren");
+      XLSX.writeFile(wb, "fisa_teren.xlsx");
+    }
+  </script>
 </body>
 </html>
