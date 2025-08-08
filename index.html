@@ -2,82 +2,27 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <title>Fișe Arboret din Excel</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f8f5; }
-    h2 { color: #2e8b57; }
-    input, button { padding: 10px; margin: 10px 0; width: 100%; max-width: 400px; }
-    button { background: #2e8b57; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #246b45; }
-    #status { margin-top: 10px; color: #444; }
-  </style>
+  <title>Fișă Arboret</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <header>
+    <h1>Fișă Arboret</h1>
+  </header>
+  <nav>
+    <a href="birou.html">Birou</a>
+    <a href="teren.html">Teren</a>
+  </nav>
+  <div class="container">
+    <p>Alege modul de lucru: Birou sau Teren.</p>
+  </div>
 
-  <h2>📤 Încarcă fișier Excel</h2>
-  <input type="file" id="excelInput" accept=".xlsx,.xls">
-  <div id="status">Nicio încărcare</div>
-
-  <h2>🔍 Introdu cod UA</h2>
-  <input type="text" id="uaInput" placeholder="Ex: 123A">
-  <button onclick="genereazaFisa()">📄 Generează fișă PDF</button>
-
+  <script src="app.js"></script>
   <script>
-    let dateExcel = [];
-
-    document.getElementById("excelInput").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const data = new Uint8Array(evt.target.result);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        dateExcel = XLSX.utils.sheet_to_json(sheet);
-        document.getElementById("status").textContent = `✅ Fișier încărcat: ${file.name}`;
-      };
-      reader.readAsArrayBuffer(file);
-    });
-
-    async function genereazaFisa() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const codUA = document.getElementById("uaInput").value.trim();
-
-      if (!codUA) {
-        alert("⚠️ Introdu un cod UA!");
-        return;
-      }
-
-      const rand = dateExcel.find(r => r.UA?.toString().trim() === codUA);
-      if (!rand) {
-        alert(`❌ Cod UA "${codUA}" nu a fost găsit în Excel.`);
-        return;
-      }
-
-      const fisa = `
-──────────────────────────────────────────────
-🧾 Fișă UA: ${rand.UA}
-──────────────────────────────────────────────
-🏢 ADM: ${rand.ADM || "-"}
-🌲 Specie: ${rand.Specie || "-"}
-📅 Vârstă: ${rand.Vârstă || "-"} ani
-📏 Diametru: ${rand.Diametru || "-"} cm
-📐 Înălțime: ${rand.Înălțime || "-"} m
-🌱 Proveniență: ${rand.Proveniență || "-"}
-💚 Vitalitate: ${rand.Vitalitate || "-"}
-🎯 Țel gospodărire: ${rand["Țel gospodărire"] || "-"}
-🌍 Drum: ${rand.Drum || "-"}
-⚠️ Condiții: ${rand.Condiții || "-"}
-──────────────────────────────────────────────
-`;
-
-      doc.text(fisa.trim(), 10, 10);
-      doc.save(`Fisa_${codUA}.pdf`);
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
     }
   </script>
-
 </body>
 </html>
