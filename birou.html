@@ -2,26 +2,22 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Birou – Fișe Arboret</title>
+  <title>Fișă Birou</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <h2>🖥️ Modul Birou</h2>
-  <label>Listă U.A.:</label>
-  <textarea id="listaUA" rows="4" placeholder="Ex: 123A, 124 A, 125A"></textarea>
-
-  <button onclick="genereazaFiseMultiple()">🧾 Generează fișe</button>
-  <button onclick="exportaPDF()">📄 Exportă PDF</button>
-  <button onclick="exportaExcel()">📊 Exportă Excel</button>
-
-  <div id="fisaUA" class="section" style="display:none;">
-    <pre id="fisaContent"></pre>
+  <header><h1>Mod Birou</h1></header>
+  <nav>
+    <a href="index.html">Acasă</a>
+    <a href="teren.html">Teren</a>
+  </nav>
+  <div class="container">
+    <label>Specie:</label>
+    <input type="text"><br><br>
+    <label>Diametru:</label>
+    <input type="number"><br><br>
+    <label>Observații:</label><br>
+    <textarea rows="4" cols="40"></textarea><br><br>
   </div>
-
-  <script src="app.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
