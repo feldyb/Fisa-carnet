@@ -3,18 +3,16 @@ self.addEventListener("install", e => {
     caches.open("arboret-cache").then(cache => {
       return cache.addAll([
         "index.html",
-        "teren.html",
         "birou.html",
+        "teren.html",
         "style.css",
         "app.js",
-        "manifest.json"
+        "manifest.json",
+        "icon.png"
       ]);
     })
   );
 });
 
 self.addEventListener("fetch", e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
-  );
-});
+  e.respond
