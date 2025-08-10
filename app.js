@@ -59,7 +59,23 @@ function genereazaFiseMultiple() {
   document.getElementById("fisaUA").style.display = "block";
 }
 
-function exportaPDF() {
+function loadScriptOnce(scriptUrl) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${scriptUrl}"]`)) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = scriptUrl;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error(`Eroare la încărcarea scriptului: ${scriptUrl}`));
+    document.head.appendChild(s);
+  });
+}
+
+async function exportaPDF() {
+  const jspdfUrl = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  if (!window.jspdf) {
+    await loadScriptOnce(jspdfUrl);
+  }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   const text = document.getElementById("fisaContent").textContent;
@@ -73,7 +89,11 @@ function exportaPDF() {
   doc.save("fise_arboret.pdf");
 }
 
-function exportaExcel() {
+async function exportaExcel() {
+  const xlsxUrl = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  if (!window.XLSX) {
+    await loadScriptOnce(xlsxUrl);
+  }
   const lista = document.getElementById("listaUA").value.split(",");
   const rows = [];
 

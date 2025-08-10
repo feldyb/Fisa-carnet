@@ -2,8 +2,10 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fișă Teren</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 </head>
 <body>
   <header><h1>Mod Teren</h1></header>
@@ -37,8 +39,6 @@
     <button onclick="exportExcel()">📊 Export Excel</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
     function getLocation() {
       if (navigator.geolocation) {
@@ -66,7 +66,23 @@
       alert("Datele au fost salvate local (simulat).");
     }
 
+    function loadScriptOnce(scriptUrl) {
+      return new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${scriptUrl}"]`)) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = scriptUrl;
+        s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error(`Eroare la încărcarea scriptului: ${scriptUrl}`));
+        document.head.appendChild(s);
+      });
+    }
+
     async function exportPDF() {
+      const jspdfUrl = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      if (!window.jspdf) {
+        await loadScriptOnce(jspdfUrl);
+      }
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
@@ -86,7 +102,12 @@
       doc.save("fisa_teren.pdf");
     }
 
-    function exportExcel() {
+    async function exportExcel() {
+      const xlsxUrl = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      if (!window.XLSX) {
+        await loadScriptOnce(xlsxUrl);
+      }
+
       const specie = document.getElementById("specieTeren").value;
       const diametru = document.getElementById("diametru").value;
       const inaltime = document.getElementById("inaltime").value;
