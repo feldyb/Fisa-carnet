@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisa arboretului - SODESTRAL</title>
+    <link rel="stylesheet" href="arboretum.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-circle">
+                    <div class="logo-text">
+                        <span class="top">SODESTRAL</span>
+                        <span class="left">UMR.O.I.T.I.L.</span>
+                        <span class="bottom">ANÕEZ.</span>
+                        <span class="right">MOLDRIMIAH</span>
+                    </div>
+                    <div class="tree-icon">🌳</div>
+                </div>
+            </div>
+            <h1 class="title">Fisa arboretului</h1>
+            <div class="author">byFeldyBagdan</div>
+        </header>
+
+        <!-- General Identification Section -->
+        <section class="general-identification">
+            <h2>Identificare generală</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>CODU</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>ADM</label>
+                    <select class="form-control">
+                        <option>Fond forestrer amenquietivi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>INV</label>
+                    <select class="form-control">
+                        <option>Arbarere inventariai intégral</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control">
+                        <option>Arboret inventariat și</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Section -->
+        <section class="main-content">
+            <!-- Functional Classification -->
+            <div class="column">
+                <h2>Clasificare functionălă</h2>
+                <div class="form-group">
+                    <label>ADM</label>
+                    <select class="form-control">
+                        <option>Fond foresfeer 1: Adminsitraree, Ministerului SL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FLS</label>
+                    <select class="form-control">
+                        <option>Păduri și terenuri destinate împăžurtril</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>GF FCT</label>
+                    <select class="form-control">
+                        <option>Arbare de sitiate is perimetrole de prostate</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Forest Station -->
+            <div class="column">
+                <h2>Statiune forestieră</h2>
+                <div class="form-group">
+                    <label>TS</label>
+                    <select class="form-control">
+                        <option>Montan de metidauri SL, podaolic cu humo,</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FLS</label>
+                    <select class="form-control">
+                        <option>Oxală: Dentaria</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>GOLU</label>
+                    <select class="form-control">
+                        <option>Gerneatiomiuri CG: Tipic</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tables Section -->
+        <section class="tables-section">
+            <!-- Species and Mixture -->
+            <div class="table-container">
+                <h2>Specii și amestec</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Specia</th>
+                            <th>Cod</th>
+                            <th>P</th>
+                            <th>R</th>
+                            <th>DM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Moliță</td>
+                            <td>MO</td>
+                            <td>4</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Fag</td>
+                            <td>FA</td>
+                            <td>2</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary">Adâugâ apecie</button>
+            </div>
+
+            <!-- Component Species -->
+            <div class="table-container">
+                <h2>Specii componente</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Specia</th>
+                            <th>Cod</th>
+                            <th>P</th>
+                            <th>DM</th>
+                            <th>HM</th>
+                            <th>VOLU</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Moliță</td>
+                            <td>MO</td>
+                            <td>3</td>
+                            <td>40 cm</td>
+                            <td>12 m</td>
+                            <td>0.21</td>
+                        </tr>
+                        <tr>
+                            <td>Fag</td>
+                            <td>FA</td>
+                            <td>2</td>
+                            <td>40 cm</td>
+                            <td>18 m</td>
+                            <td>0.81</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button-group">
+                    <button class="btn btn-primary">Adaugâ śpecie</button>
+                    <button class="btn btn-secondary">Renunta</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="arboretum.js"></script>
+</body>
+</html>
