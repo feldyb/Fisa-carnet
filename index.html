@@ -2,29 +2,85 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fișă Arboret</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fișă Silvică</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <header>
-    <h1>Fișă Arboret</h1>
-  </header>
-  <nav>
-    <a href="birou.html">Birou</a>
-    <a href="teren.html">Teren</a>
-    <a href="arboretum.html">Fisa Arboretului</a>
-  </nav>
-  <div class="container">
-    <p>Alege modul de lucru: Birou, Teren sau Fisa Arboretului.</p>
-  </div>
+  <h1>🌲 Fișă Silvică – Versiunea 1.0</h1>
+  <form id="fisaForm">
+    
+    <h2>📍 Identificare</h2>
+    <input id="isj" placeholder="ISJ" />
+    <input id="os" placeholder="OS" />
+    <input id="up" placeholder="UP" />
+    <input id="ua" placeholder="UA" />
+    <input id="subparcela" placeholder="Subparcelă" />
+    <input id="suprafata" placeholder="Suprafață (ha)" />
+    <input id="fond" placeholder="Fond Funciar" />
+    <input id="tip_padure" placeholder="Tip Pădure (TP)" />
+    <input id="altitudine" placeholder="Altitudine (m)" />
+    <input id="poluare" placeholder="Poluare" />
+    <input id="drum" placeholder="Drum" />
+    <input id="distanta" placeholder="Distanță (m)" />
+    <input id="sth" placeholder="STH" />
+    <input id="cns" placeholder="CNS" />
+    <input id="crt" placeholder="CRT" />
 
-  <script src="app.js" defer></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
-    }
-  </script>
+    <h2>🌱 Stațiune</h2>
+    <input id="fct" placeholder="Funcționalitate (FCT)" />
+    <input id="relief" placeholder="Relief" />
+    <input id="cne" placeholder="CNE" />
+    <input id="expo" placeholder="Expoziție" />
+    <input id="in" placeholder="IN" />
+    <input id="alt_min" placeholder="Altitudine minimă" />
+    <input id="alt_max" placeholder="Altitudine maximă" />
+    <input id="sol" placeholder="Sol" />
+    <input id="erz" placeholder="Eroziune" />
+    <input id="flora" placeholder="Flora" />
+    <input id="ts" placeholder="Tip Stațiune (TS)" />
+
+    <h2>🧪 Inventar</h2>
+    <input id="inv" placeholder="An inventar" />
+    <input id="te" placeholder="Vârstă exploatare" />
+    <input id="urg" placeholder="Urgență" />
+    <input id="prm" placeholder="Propunere" />
+    <input id="nim" placeholder="NIM" />
+    <input id="nid" placeholder="NID" />
+
+    <h2>🛠️ Lucrări</h2>
+    <input id="lx" placeholder="Lucrări executate" />
+    <input id="lp" placeholder="Lucrări propuse" />
+    <input id="dc" placeholder="Date complementare" />
+
+    <h2>🌿 Subarboret</h2>
+    <input id="sba" placeholder="Subarboret" />
+    <input id="ms" placeholder="MS (%)" />
+    <input id="seminis" placeholder="Seminiș utilizabil (%)" />
+    <input id="ip" placeholder="Creștere mc/ha/an" />
+
+    <h2>🔧 Compoziție</h2>
+    <input id="tel" placeholder="Compoziție TEL" />
+    <input id="sp1" placeholder="Specie 1" />
+    <input id="sp2" placeholder="Specie 2" />
+    <input id="sp3" placeholder="Specie 3" />
+    <input id="sp4" placeholder="Specie 4" />
+    <input id="sp5" placeholder="Specie 5" />
+    <input id="sp6" placeholder="Specie 6" />
+    <input id="soc" placeholder="SOC" />
+    <input id="rs" placeholder="RS" />
+    <input id="nrs" placeholder="NRS" />
+    <input id="vs" placeholder="Vârsta medie" />
+
+    <h2>🔩 Elemente Tehnice</h2>
+    <div id="elementeContainer"></div>
+    <button type="button" onclick="adaugaRand()">➕ Adaugă specie</button>
+
+    <br><br>
+    <button type="submit">💾 Salvează fișa</button>
+    <button type="button" onclick="genereazaAscii()">📄 Generează ASCII</button>
+  </form>
+
+  <script src="app.js"></script>
 </body>
 </html>
