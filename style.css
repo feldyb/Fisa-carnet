@@ -1,3 +1,4 @@
+/* Reset & bază */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,29 +12,35 @@ body {
   padding: 20px;
 }
 
+/* Titlu principal */
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #2e7d32;
+  font-size: 28px;
 }
 
+/* Formular */
 form {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   background: #fff;
-  padding: 20px;
+  padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
 }
 
+/* Secțiuni */
 h2 {
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin-top: 40px;
+  margin-bottom: 15px;
   color: #1565c0;
+  font-size: 20px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;
 }
 
+/* Câmpuri */
 input, select {
   width: 100%;
   padding: 10px;
@@ -41,18 +48,21 @@ input, select {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
+  background-color: #fafafa;
 }
 
+/* Elemente tehnice */
 .element-tehnic {
   background-color: #e3f2fd;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
   border-radius: 8px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
 }
 
+/* Butoane */
 button {
   background-color: #2e7d32;
   color: white;
@@ -69,12 +79,25 @@ button:hover {
   background-color: #1b5e20;
 }
 
-@media (max-width: 600px) {
-  .element-tehnic {
-    grid-template-columns: 1fr;
+/* Responsivitate */
+@media (max-width: 768px) {
+  form {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  h2 {
+    font-size: 18px;
   }
 
   input, select, button {
     font-size: 14px;
+  }
+
+  .element-tehnic {
+    grid-template-columns: 1fr;
   }
 }
