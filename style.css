@@ -1,11 +1,9 @@
-/* Reset de bază */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Fundal și font */
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f4f6f8;
@@ -13,14 +11,12 @@ body {
   padding: 20px;
 }
 
-/* Titlu principal */
 h1 {
   text-align: center;
   margin-bottom: 20px;
   color: #2e7d32;
 }
 
-/* Secțiuni de formular */
 form {
   max-width: 800px;
   margin: auto;
@@ -38,7 +34,6 @@ h2 {
   padding-bottom: 5px;
 }
 
-/* Câmpuri de input */
 input, select {
   width: 100%;
   padding: 10px;
@@ -48,7 +43,6 @@ input, select {
   font-size: 16px;
 }
 
-/* Rânduri tehnice */
 .element-tehnic {
   background-color: #e3f2fd;
   padding: 10px;
@@ -59,7 +53,6 @@ input, select {
   gap: 10px;
 }
 
-/* Butoane */
 button {
   background-color: #2e7d32;
   color: white;
@@ -76,7 +69,6 @@ button:hover {
   background-color: #1b5e20;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .element-tehnic {
     grid-template-columns: 1fr;
