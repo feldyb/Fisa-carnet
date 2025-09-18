@@ -23,9 +23,10 @@ function adaugaRand() {
   container.appendChild(div);
 }
 
-// 🔹 Salvează fișa local în browser
+// 🔹 Salvează fișa local și o descarcă ca JSON
 document.getElementById("fisaForm").addEventListener("submit", function (e) {
   e.preventDefault();
+
   const data = new FormData(this);
   const fisa = {};
   for (let [key, value] of data.entries()) {
@@ -41,7 +42,17 @@ document.getElementById("fisaForm").addEventListener("submit", function (e) {
   });
 
   localStorage.setItem("fisa_" + fisa.subparcela, JSON.stringify(fisa));
-  alert("✅ Fișa a fost salvată local!");
+
+  const blob = new Blob([JSON.stringify(fisa, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  const filename = `fisa_UP${fisa.up}_UA${fisa.ua}_SP${fisa.subparcela}.json`;
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  alert("✅ Fișa a fost salvată local și descărcată!");
 });
 
 // 🔹 Descărcă fișa ASCII ca fișier .txt
@@ -86,7 +97,7 @@ function genereazaAscii() {
 
   ascii += `\n────────────────────────────────────────────\n📄 Fișa generată automat – Versiunea 1.0\n`;
 
-  const filename = `fisa_UP${get("up")}_UA${get("ua")}.txt`;
+  const filename = `fisa_UP${get("up")}_UA${get("ua")}_SP${get("subparcela")}.txt`;
   downloadAscii(ascii, filename);
 }
 
@@ -105,4 +116,4 @@ function exportPDF() {
     pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
     pdf.save("fisa_silvica.pdf");
   });
-}
+                                                                                                                                                                                                                                                                                                                          }
