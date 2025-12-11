@@ -2,10 +2,6 @@
   "name": "Fișă Silvică",
   "short_name": "FisaSilvica",
   "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#f4f6f8",
-  "theme_color": "#2e7d32",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
