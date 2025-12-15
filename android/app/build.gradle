@@ -24,6 +24,12 @@ android {
     }
 }
 
+configurations {
+    all {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+}
+
 repositories {
     flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
