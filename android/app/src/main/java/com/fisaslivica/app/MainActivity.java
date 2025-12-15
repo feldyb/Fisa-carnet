@@ -1,4 +1,4 @@
-package com.fisa.carnet;
+package com.fisaslivica.app;
 
 import com.getcapacitor.BridgeActivity;
 
