@@ -1,6 +1,6 @@
 {
-  "appId": "com.fisa.carnet",
-  "appName": "Fisa Carnet",
+  "appId": "com.fisaslivica.app",
+  "appName": "Fisa Silvica",
   "webDir": "dist",
   "server": {
     "androidScheme": "https",

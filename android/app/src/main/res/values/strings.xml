@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Fisa Carnet</string>
-    <string name="title_activity_main">Fisa Carnet</string>
-    <string name="package_name">com.fisa.carnet</string>
-    <string name="custom_url_scheme">com.fisa.carnet</string>
+    <string name="app_name">Fisa Silvica</string>
+    <string name="title_activity_main">Fisa Silvica</string>
+    <string name="package_name">com.fisaslivica.app</string>
+    <string name="custom_url_scheme">com.fisaslivica.app</string>
 </resources>
