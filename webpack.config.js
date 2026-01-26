@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: './'
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -28,5 +28,10 @@ module.exports = {
       template: './index.html',
       filename: 'index.html'
     })
-  ]
+  ],
+  devServer: {
+    historyApiFallback: true,
+    compress: true,
+    port: 3002
+  }
 };

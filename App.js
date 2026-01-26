@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -40,11 +40,6 @@ const App = () => {
     lx: '',
     lp: '',
     dc: '',
-    sba: '',
-    ms: '',
-    seminis: '',
-    ip: '',
-    supr: '',
     tel: '',
     sp1: '',
     sp2: '',
@@ -52,17 +47,27 @@ const App = () => {
     sp4: '',
     sp5: '',
     sp6: '',
+    sba: '',
+    so: '',
+    mr: '',
+    ds: '',
+    vs: '',
+    vs_sp1: '',
+    vs_sp2: '',
+    vs_sp3: '',
+    vs_sp4: '',
+    vs_sp5: '',
+    vs_sp6: '',
     soc: '',
     rs: '',
     nrs: '',
-    vs: '',
   });
 
   const [elemente, setElemente] = useState([]);
 
   const adaugaRand = () => {
-    setElemente([...elemente, { 
-      elem: '', mrg: '', varsta: '', prop: '', diametru: '', inaltime: '', m: '', ams: 'DA', elg: '', vit: 'bun', cal: 'A', crest: '', volum: '', pex: '', provenienta: ''
+    setElemente(prevElemente => [...prevElemente, { 
+      elem: '', mrg: '', varsta: '', prop: '', diametru: '', inaltime: '', m: '', ams: '', elg: '', vit: '', cal: '', crest: '', volum: '', pex: '', provenienta: ''
     }]);
   };
 
@@ -74,37 +79,91 @@ const App = () => {
   };
 
   const handleElementChange = (e, index) => {
+    const { name, value } = e.target;
     const newElemente = [...elemente];
-    newElemente[index][e.target.name] = e.target.value;
+    newElemente[index] = {
+      ...newElemente[index],
+      [name]: value
+    };
     setElemente(newElemente);
   };
   
   const get = (id) => formData[id] || '-';
 
   const genereazaAsciiText = () => {
-    let ascii = `────────────────────────────────────────────\n`;
-    ascii += `🌲 FIȘĂ TEREN – Subparcelă ${get("subparcela")} / UP${get("up")} / UA${get("ua")}\n`;
-    ascii += `────────────────────────────────────────────\n\n`;
-    ascii += `📍 IDENTIFICARE\nISJ: ${get("isj")}\nOS: ${get("os")}\nUP: ${get("up")}\nUA: ${get("ua")}\nSubparcelă: ${get("subparcela")}\nSuprafață: ${get("suprafata")} ha\nFond: ${get("fond")}\nTP: ${get("tp")}\nPoluare: ${get("poluare")}\nDrum: ${get("drum")}\nDistanță: ${get("distanta")} m\nSTR: ${get("str")}\nCNS: ${get("cns")}\nCRT: ${get("crt")}\nREG: ${get("reg")}\nTA: ${get("ta")}\n\n`;
-    ascii += `🌱 STAȚIUNE\nFCT: ${get("fct")}\nRelief: ${get("relief")}\nCNE: ${get("cne")}\nExpoziție: ${get("expo")}\nIN: ${get("in")}\nAlt min: ${get("alt_min")}\nAlt max: ${get("alt_max")}\nSol: ${get("sol")}\nEroziune: ${get("erz")}\nFlora: ${get("flora")}\nTS: ${get("ts")}\n\n`;
-    ascii += `🧪 INVENTAR\nAn: ${get("inv")}\nTE: ${get("te")}\nURG: ${get("urg")}\nPRM: ${get("prm")}\nNIM: ${get("nim")}\nNID: ${get("nid")}\n\n`;
-    ascii += `🛠️ LUCRĂRI\nExecutate: ${get("lx")}\nPropuse: ${get("lp")}\nDate complementare: ${get("dc")}\n\n`;
-    ascii += `🌿 SUBARBORET\nSBA: ${get("sba")}\nMS: ${get("ms")}%\nSeminiș: ${get("seminis")}%\nIP: ${get("ip")} mc/ha/an\n%SUPR: ${get("supr")}\n\n`;
-    ascii += `🔧 COMPOZIȚIE\nTEL: ${get("tel")}\nSP1: ${get("sp1")}\nSP2: ${get("sp2")}\nSP3: ${get("sp3")}\nSP4: ${get("sp4")}\nSP5: ${get("sp5")}\nSP6: ${get("sp6")}\nSOC: ${get("soc")}\nRS: ${get("rs")}\nNRS: ${get("nrs")}\nVS: ${get("vs")}\n\n`;
-    ascii += `🔩 ELEMENTE TEHNICE\nElem | MRG | Vârstă | Prop | Diametru | Înălțime | M | AMS | ELG | VIT | Cal | Creșt | Volum | PEX | Prov\n`;
-    ascii += `─────┼─────┼────────┼──────┼──────────┼──────────┼──┼─────┼─────┼─────┼─────┼────────┼────────┼─────┼───────\n`;
+    const p = (str, len) => String(str).padEnd(len);
+    let ascii = '';
+    
+    const buildSection = (title, fields) => {
+        let sectionAscii = title + '\n';
+        const content = fields.join(' | ');
+        sectionAscii += content + '\n';
+        sectionAscii += '─'.repeat(content.length) + '\n\n';
+        return sectionAscii;
+    };
 
-    elemente.forEach(row => {
-      const valori = Object.values(row).map(val => val || '-');
-      ascii += valori.join(" | ") + "\n";
-    });
+    ascii += `🌲 FIȘĂ TEREN - Subparcelă: ${get('subparcela')} / UP: ${get('up')} / UA: ${get('ua')}\n`;
+    ascii += '─'.repeat(`🌲 FIȘĂ TEREN - Subparcelă: ${get('subparcela')} / UP: ${get('up')} / UA: ${get('ua')}`.length) + '\n\n';
 
-    ascii += `\n────────────────────────────────────────────\n📄 Fișa generată automat – Versiunea 1.0\n`;
+    ascii += buildSection('📍 IDENTIFICARE', [
+        `ISJ: ${get('isj')}`, `OS: ${get('os')}`, `UP: ${get('up')}`, `UA: ${get('ua')}`, `Subparcelă: ${get('subparcela')}`,
+        `Suprafață: ${get('suprafata')} ha`, `Fond: ${get('fond')}`, `TP: ${get('tp')}`, `Poluare: ${get('poluare')}`, `Drum: ${get('drum')}`,
+        `Distanță: ${get('distanta')} m`, `STR: ${get('str')}`, `CNS: ${get('cns')}`, `CRT: ${get('crt')}`, `REG: ${get('reg')}`, `TA: ${get('ta')}`
+    ]);
+
+    ascii += buildSection('🌱 STAȚIUNE', [
+        `FCT: ${get('fct')}`, `Relief: ${get('relief')}`, `CNE: ${get('cne')}`, `Expoziție: ${get('expo')}`, `IN: ${get('in')}`,
+        `Alt min: ${get('alt_min')}`, `Alt max: ${get('alt_max')}`, `Sol: ${get('sol')}`, `Eroziune: ${get('erz')}`,
+        `Flora: ${get('flora')}`, `TS: ${get('ts')}`
+    ]);
+
+    ascii += buildSection('🧪 INVENTAR', [
+        `TE: ${get('te')}`, `URG: ${get('urg')}`, `PRM: ${get('prm')}`, `NIM: ${get('nim')}`, `NID: ${get('nid')}`
+    ]);
+
+    ascii += buildSection('🛠️ LUCRĂRI', [
+        `Executate: ${get('lx')}`, `Propuse: ${get('lp')}`, `Date complementare: ${get('dc')}`
+    ]);
+
+    ascii += buildSection('🔧 COMPOZIȚIE', [
+        `TEL: ${get('tel')}`, `SP1: ${get('sp1')}`, `SP2: ${get('sp2')}`, `SP3: ${get('sp3')}`, `SP4: ${get('sp4')}`, `SP5: ${get('sp5')}`, `SP6: ${get('sp6')}`,
+        `SBA: ${get('sba')}`, `SO: ${get('so')}`, `MR: ${get('mr')}`, `DS: ${get('ds')}`
+    ]);
+
+    ascii += buildSection('🔧 SEMINȚIȘ UTILIZABIL', [
+        `VS: ${get('vs')}`, `SP1: ${get('vs_sp1')}`, `SP2: ${get('vs_sp2')}`, `SP3: ${get('vs_sp3')}`, `SP4: ${get('vs_sp4')}`, `SP5: ${get('vs_sp5')}`, `SP6: ${get('vs_sp6')}`,
+        `SOC: ${get('soc')}`, `RS: ${get('rs')}`, `NRS: ${get('nrs')}`
+    ]);
+
+    ascii += '🔩 ELEMENTE TEHNICE\n';
+    const h_elem_array = ['Elem', 'MRG', 'Vârstă', 'Prop', 'Diametru', 'Înălțime', 'M', 'AMS', 'ELG', 'VIT', 'Cal', 'Creșt', 'Volum', 'PEX', 'Prov'];
+    const elem_pads = [4, 4, 6, 5, 8, 8, 2, 4, 4, 4, 4, 5, 5, 4, 5];
+    
+    const h_elem = h_elem_array.map((h, i) => p(h, elem_pads[i])).join(' | ');
+    ascii += h_elem + '\n';
+    ascii += '─'.repeat(h_elem.length) + '\n';
+
+    if (elemente.length > 0) {
+        elemente.forEach(row => {
+            const d_elem_array = [
+                row.elem || '-', row.mrg || '-', row.varsta || '-', row.prop || '-',
+                row.diametru || '-', row.inaltime || '-', row.m || '-', row.ams || '-',
+                row.elg || '-', row.vit || '-', row.cal || '-', row.crest || '-',
+                row.volum || '-', row.pex || '-', row.provenienta || '-'
+            ];
+            const d_elem = d_elem_array.map((d, i) => p(d, elem_pads[i])).join(' | ');
+            ascii += d_elem + '\n';
+        });
+    } else {
+        ascii += 'Niciun element tehnic adăugat.\n';
+    }
+    ascii += '─'.repeat(h_elem.length) + '\n';
+
     return ascii;
   };
 
   const downloadAscii = (asciiText, filename = "fisa_silvica.txt") => {
-    const blob = new Blob([asciiText], { type: "text/plain" });
+    const blob = new Blob([asciiText], { type: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = filename;
@@ -120,15 +179,109 @@ const App = () => {
   };
 
   const exportPDF = () => {
-    const ascii = genereazaAsciiText();
-    const pdf = new jsPDF("p", "mm", "a4");
-    const lines = pdf.splitTextToSize(ascii, 180);
-    pdf.setFont("Courier", "normal");
-    pdf.setFontSize(10);
-    pdf.text(lines, 10, 20);
-    const filename = `fisa_UP${get("up")}_UA${get("ua")}_SP${get("subparcela")}.pdf`;
-    pdf.save(filename);
+    const doc = new jsPDF();
+    
+    doc.text(`FIȘĂ TEREN - Subparcelă: ${get('subparcela')} / UP: ${get('up')} / UA: ${get('ua')}`, 14, 15);
+
+    let finalY = 20;
+
+    finalY = autoTable(doc, { 
+        startY: finalY, 
+        head: [[{ content: '📍 IDENTIFICARE', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [ `ISJ: ${get('isj')}`, `OS: ${get('os')}`, `UP: ${get('up')}`, `UA: ${get('ua')}`, `Subparcelă: ${get('subparcela')}`],
+            [ `Suprafață: ${get('suprafata')} ha`, `Fond: ${get('fond')}`, `TP: ${get('tp')}`, `Poluare: ${get('poluare')}`, `Drum: ${get('drum')}`],
+            [ `Distanță: ${get('distanta')} m`, `STR: ${get('str')}`, `CNS: ${get('cns')}`, `CRT: ${get('crt')}`, `REG: ${get('reg')}`, `TA: ${get('ta')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+
+    finalY = autoTable(doc, { 
+        startY: finalY + 5,
+        head: [[{ content: '🌱 STAȚIUNE', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [ `FCT: ${get('fct')}`, `Relief: ${get('relief')}`, `CNE: ${get('cne')}`, `Expoziție: ${get('expo')}`, `IN: ${get('in')}`],
+            [ `Alt min: ${get('alt_min')}`, `Alt max: ${get('alt_max')}`, `Sol: ${get('sol')}`, `Eroziune: ${get('erz')}`],
+            [ `Flora: ${get('flora')}`, `TS: ${get('ts')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+    
+    finalY = autoTable(doc, { 
+        startY: finalY + 5,
+        head: [[{ content: '🧪 INVENTAR', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [`An inventar: ${get('inv')}`, `TE: ${get('te')}`, `URG: ${get('urg')}`, `PRM: ${get('prm')}`, `NIM: ${get('nim')}`, `NID: ${get('nid')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+
+    finalY = autoTable(doc, {
+        startY: finalY + 5,
+        head: [[{ content: '🛠️ LUCRĂRI', colSpan: 3, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [`Executate: ${get('lx')}`, `Propuse: ${get('lp')}`, `Date complementare: ${get('dc')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+
+    finalY = autoTable(doc, {
+        startY: finalY + 5,
+        head: [[{ content: '🔧 COMPOZIȚIE', colSpan: 7, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [`TEL: ${get('tel')}`, `SP1: ${get('sp1')}`, `SP2: ${get('sp2')}`, `SP3: ${get('sp3')}`, `SP4: ${get('sp4')}`, `SP5: ${get('sp5')}`, `SP6: ${get('sp6')}`],
+            [`SBA: ${get('sba')}`, `SO: ${get('so')}`, `MR: ${get('mr')}`, `DS: ${get('ds')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+    
+    finalY = autoTable(doc, {
+        startY: finalY + 5,
+        head: [[{ content: '🔧 SEMINȚIȘ UTILIZABIL', colSpan: 7, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        body: [
+            [`VS: ${get('vs')}`, `SP1: ${get('vs_sp1')}`, `SP2: ${get('vs_sp2')}`, `SP3: ${get('vs_sp3')}`, `SP4: ${get('vs_sp4')}`, `SP5: ${get('vs_sp5')}`, `SP6: ${get('vs_sp6')}`],
+            [`SOC: ${get('soc')}`, `RS: ${get('rs')}`, `NRS: ${get('nrs')}`]
+        ],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+
+    autoTable(doc, {
+        startY: finalY + 5,
+        head: [[{ content: '🔩 ELEMENTE TEHNICE', colSpan: 15, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
+        theme: 'grid',
+        didDrawPage: (data) => {
+            finalY = data.cursor.y;
+        }
+    });
+
+    autoTable(doc, {
+        startY: finalY,
+        head: [['Elem', 'MRG', 'Vârstă', 'Prop', 'Diametru', 'Înălțime', 'M', 'AMS', 'ELG', 'VIT', 'Cal', 'Creșt', 'Volum', 'PEX', 'Prov']],
+        body: elemente.map(el => [el.elem, el.mrg, el.varsta, el.prop, el.diametru, el.inaltime, el.m, el.ams, el.elg, el.vit, el.cal, el.crest, el.volum, el.pex, el.provenienta]),
+        theme: 'grid'
+    });
+
+    doc.save(`fisa_UP${get("up")}_UA${get("ua")}_SP${get("subparcela")}.pdf`);
   };
+
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -193,13 +346,6 @@ const App = () => {
         <input id="lp" placeholder="Lucrări propuse" value={formData.lp} onChange={handleFormChange} />
         <input id="dc" placeholder="Date complementare" value={formData.dc} onChange={handleFormChange} />
 
-        <h2>🌿 Subarboret</h2>
-        <input id="sba" placeholder="Subarboret (SBA)" value={formData.sba} onChange={handleFormChange} />
-        <input id="ms" placeholder="MS (%)" value={formData.ms} onChange={handleFormChange} />
-        <input id="seminis" placeholder="Seminiș utilizabil (%)" value={formData.seminis} onChange={handleFormChange} />
-        <input id="ip" placeholder="Creștere mc/ha/an (IP)" value={formData.ip} onChange={handleFormChange} />
-        <input id="supr" placeholder="%SUPR" value={formData.supr} onChange={handleFormChange} />
-
         <h2>🔧 Compoziție</h2>
         <input id="tel" placeholder="Compoziție TEL" value={formData.tel} onChange={handleFormChange} />
         <input id="sp1" placeholder="Specie 1" value={formData.sp1} onChange={handleFormChange} />
@@ -208,10 +354,22 @@ const App = () => {
         <input id="sp4" placeholder="Specie 4" value={formData.sp4} onChange={handleFormChange} />
         <input id="sp5" placeholder="Specie 5" value={formData.sp5} onChange={handleFormChange} />
         <input id="sp6" placeholder="Specie 6" value={formData.sp6} onChange={handleFormChange} />
+        <input id="sba" placeholder="SBA" value={formData.sba} onChange={handleFormChange} />
+        <input id="so" placeholder="SO" value={formData.so} onChange={handleFormChange} />
+        <input id="mr" placeholder="MR" value={formData.mr} onChange={handleFormChange} />
+        <input id="ds" placeholder="DS" value={formData.ds} onChange={handleFormChange} />
+
+        <h2>🔧 Semințiș Utilizabil</h2>
+        <input id="vs" placeholder="Vârsta medie (VS)" value={formData.vs} onChange={handleFormChange} />
+        <input id="vs_sp1" placeholder="Specie 1" value={formData.vs_sp1} onChange={handleFormChange} />
+        <input id="vs_sp2" placeholder="Specie 2" value={formData.vs_sp2} onChange={handleFormChange} />
+        <input id="vs_sp3" placeholder="Specie 3" value={formData.vs_sp3} onChange={handleFormChange} />
+        <input id="vs_sp4" placeholder="Specie 4" value={formData.vs_sp4} onChange={handleFormChange} />
+        <input id="vs_sp5" placeholder="Specie 5" value={formData.vs_sp5} onChange={handleFormChange} />
+        <input id="vs_sp6" placeholder="Specie 6" value={formData.vs_sp6} onChange={handleFormChange} />
         <input id="soc" placeholder="SOC" value={formData.soc} onChange={handleFormChange} />
         <input id="rs" placeholder="RS" value={formData.rs} onChange={handleFormChange} />
         <input id="nrs" placeholder="NRS" value={formData.nrs} onChange={handleFormChange} />
-        <input id="vs" placeholder="Vârsta medie (VS)" value={formData.vs} onChange={handleFormChange} />
 
         <h2>🔩 Elemente Tehnice</h2>
         <div id="elementeContainer">
@@ -220,25 +378,14 @@ const App = () => {
               <input name="elem" placeholder="Elem" value={el.elem} onChange={e => handleElementChange(e, index)} />
               <input name="mrg" placeholder="MRG" value={el.mrg} onChange={e => handleElementChange(e, index)} />
               <input name="varsta" placeholder="Vârstă" value={el.varsta} onChange={e => handleElementChange(e, index)} />
-              <input name="prop" placeholder="Prop (%)" value={el.prop} onChange={e => handleElementChange(e, index)} />
+              <input name="prop" placeholder="Prop (%s)" value={el.prop} onChange={e => handleElementChange(e, index)} />
               <input name="diametru" placeholder="Diametru (cm)" value={el.diametru} onChange={e => handleElementChange(e, index)} />
               <input name="inaltime" placeholder="Înălțime (m)" value={el.inaltime} onChange={e => handleElementChange(e, index)} />
               <input name="m" placeholder="M" value={el.m} onChange={e => handleElementChange(e, index)} />
-              <select name="ams" value={el.ams} onChange={e => handleElementChange(e, index)}>
-                <option>DA</option>
-                <option>NU</option>
-              </select>
+              <input name="ams" placeholder="AMS" value={el.ams} onChange={e => handleElementChange(e, index)} />
               <input name="elg" placeholder="ELG" value={el.elg} onChange={e => handleElementChange(e, index)} />
-              <select name="vit" value={el.vit} onChange={e => handleElementChange(e, index)}>
-                <option>bun</option>
-                <option>med</option>
-                <option>slab</option>
-              </select>
-              <select name="cal" value={el.cal} onChange={e => handleElementChange(e, index)}>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
+              <input name="vit" placeholder="VIT" value={el.vit} onChange={e => handleElementChange(e, index)} />
+              <input name="cal" placeholder="Cal" value={el.cal} onChange={e => handleElementChange(e, index)} />
               <input name="crest" placeholder="Creștere (mc/ha/an)" value={el.crest} onChange={e => handleElementChange(e, index)} />
               <input name="volum" placeholder="Volum (mc)" value={el.volum} onChange={e => handleElementChange(e, index)} />
               <input name="pex" placeholder="PEX" value={el.pex} onChange={e => handleElementChange(e, index)} />
