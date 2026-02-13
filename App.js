@@ -180,102 +180,78 @@ const App = () => {
 
   const exportPDF = () => {
     const doc = new jsPDF();
-    
     doc.text(`FIȘĂ TEREN - Subparcelă: ${get('subparcela')} / UP: ${get('up')} / UA: ${get('ua')}`, 14, 15);
 
-    let finalY = 20;
-
-    finalY = autoTable(doc, { 
-        startY: finalY, 
+    autoTable(doc, { 
+        startY: 20, 
         head: [[{ content: '📍 IDENTIFICARE', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [ `ISJ: ${get('isj')}`, `OS: ${get('os')}`, `UP: ${get('up')}`, `UA: ${get('ua')}`, `Subparcelă: ${get('subparcela')}`],
             [ `Suprafață: ${get('suprafata')} ha`, `Fond: ${get('fond')}`, `TP: ${get('tp')}`, `Poluare: ${get('poluare')}`, `Drum: ${get('drum')}`],
             [ `Distanță: ${get('distanta')} m`, `STR: ${get('str')}`, `CNS: ${get('cns')}`, `CRT: ${get('crt')}`, `REG: ${get('reg')}`, `TA: ${get('ta')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
 
-    finalY = autoTable(doc, { 
-        startY: finalY + 5,
+    autoTable(doc, { 
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🌱 STAȚIUNE', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [ `FCT: ${get('fct')}`, `Relief: ${get('relief')}`, `CNE: ${get('cne')}`, `Expoziție: ${get('expo')}`, `IN: ${get('in')}`],
             [ `Alt min: ${get('alt_min')}`, `Alt max: ${get('alt_max')}`, `Sol: ${get('sol')}`, `Eroziune: ${get('erz')}`],
             [ `Flora: ${get('flora')}`, `TS: ${get('ts')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
     
-    finalY = autoTable(doc, { 
-        startY: finalY + 5,
+    autoTable(doc, { 
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🧪 INVENTAR', colSpan: 6, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [`An inventar: ${get('inv')}`, `TE: ${get('te')}`, `URG: ${get('urg')}`, `PRM: ${get('prm')}`, `NIM: ${get('nim')}`, `NID: ${get('nid')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
 
-    finalY = autoTable(doc, {
-        startY: finalY + 5,
+    autoTable(doc, {
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🛠️ LUCRĂRI', colSpan: 3, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [`Executate: ${get('lx')}`, `Propuse: ${get('lp')}`, `Date complementare: ${get('dc')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
 
-    finalY = autoTable(doc, {
-        startY: finalY + 5,
+    autoTable(doc, {
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🔧 COMPOZIȚIE', colSpan: 7, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [`TEL: ${get('tel')}`, `SP1: ${get('sp1')}`, `SP2: ${get('sp2')}`, `SP3: ${get('sp3')}`, `SP4: ${get('sp4')}`, `SP5: ${get('sp5')}`, `SP6: ${get('sp6')}`],
             [`SBA: ${get('sba')}`, `SO: ${get('so')}`, `MR: ${get('mr')}`, `DS: ${get('ds')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
     
-    finalY = autoTable(doc, {
-        startY: finalY + 5,
+    autoTable(doc, {
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🔧 SEMINȚIȘ UTILIZABIL', colSpan: 7, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         body: [
             [`VS: ${get('vs')}`, `SP1: ${get('vs_sp1')}`, `SP2: ${get('vs_sp2')}`, `SP3: ${get('vs_sp3')}`, `SP4: ${get('vs_sp4')}`, `SP5: ${get('vs_sp5')}`, `SP6: ${get('vs_sp6')}`],
             [`SOC: ${get('soc')}`, `RS: ${get('rs')}`, `NRS: ${get('nrs')}`]
-        ],
+        ].map(r => r.map(c => c || '')),
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
 
     autoTable(doc, {
-        startY: finalY + 5,
+        startY: doc.autoTable.previous.finalY + 5,
         head: [[{ content: '🔩 ELEMENTE TEHNICE', colSpan: 15, styles: { halign: 'center', fillColor: [22, 160, 133] } }]],
         theme: 'grid',
-        didDrawPage: (data) => {
-            finalY = data.cursor.y;
-        }
     });
 
     autoTable(doc, {
-        startY: finalY,
+        startY: doc.autoTable.previous.finalY,
         head: [['Elem', 'MRG', 'Vârstă', 'Prop', 'Diametru', 'Înălțime', 'M', 'AMS', 'ELG', 'VIT', 'Cal', 'Creșt', 'Volum', 'PEX', 'Prov']],
-        body: elemente.map(el => [el.elem, el.mrg, el.varsta, el.prop, el.diametru, el.inaltime, el.m, el.ams, el.elg, el.vit, el.cal, el.crest, el.volum, el.pex, el.provenienta]),
+        body: elemente.map(el => [el.elem || '-', el.mrg || '-', el.varsta || '-', el.prop || '-', el.diametru || '-', el.inaltime || '-', el.m || '-', el.ams || '-', el.elg || '-', el.vit || '-', el.cal || '-', el.crest || '-', el.volum || '-', el.pex || '-', el.provenienta || '-']),
         theme: 'grid'
     });
 
