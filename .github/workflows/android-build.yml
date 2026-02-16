@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: '17'  # Updated from 21 to 17
           distribution: 'temurin'
 
-      - name: Build with Gradle
-        run: ./gradlew build
+    - name: Make gradlew executable
+        run: chmod +x gradlew
