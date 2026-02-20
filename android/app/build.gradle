@@ -1,1 +1,74 @@
-android {\n    // Other configurations\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_21\n        targetCompatibility = JavaVersion.VERSION_21\n    }\n    kotlinOptions {\n        jvmTarget = \"21\"\n    }\n}\n
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.fisa.silvica"
+    compileSdkVersion 34
+    defaultConfig {
+        applicationId "com.fisa.silvica"
+        minSdkVersion 22
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // CUSTOM CONFIGURATION
+        // You can customize the versionName and versionCode here.
+        // For example, to set the versionName to "1.2.3" and versionCode to 456,
+        // you would do the following:
+        //
+        // versionName "1.2.3"
+        // versionCode 456
+        //
+        // You can also use a separate file to manage your versions.
+        // For example, you can create a file named "version.properties" in the root of your project
+        // with the following content:
+        //
+        // version_name=1.2.3
+        // version_code=456
+        //
+        // And then you can read the values from that file in your build.gradle:
+        //
+        // def versionPropsFile = file('../version.properties')
+        // if (versionPropsFile.canRead()) {
+        //     def versionProps = new Properties()
+        //     versionProps.load(new FileInputStream(versionPropsFile))
+        //     versionName versionProps['version_name']
+        //     versionCode versionProps['version_code'].toInteger()
+        // }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+      sourceCompatibility JavaVersion.VERSION_17
+      targetCompatibility JavaVersion.VERSION_17
+    }
+    // Capacitor variables
+    ext {
+        capacitorVersion = '5'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "com.google.android.material:material:1.11.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.webkit:webkit:1.9.0"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    implementation project(':capacitor-android')
+}
+
+apply from: 'capacitor.build.gradle'
