@@ -25,8 +25,19 @@ jobs:
       - name: Build web app
         run: npm run build
 
+      - name: Debug - verify dist and config
+        run: |
+          echo "=== dist contents ==="
+          ls -la dist/
+          echo "=== capacitor.config.json ==="
+          cat capacitor.config.json
+          echo "=== android/capacitor.config.json (if exists) ==="
+          cat android/capacitor.config.json 2>/dev/null || echo "not found"
+
       - name: Sync Capacitor
-        run: npx cap sync android
+        run: |
+          npx cap copy android
+          npx cap update android
 
       - name: Setup Java
         uses: actions/setup-java@v4
