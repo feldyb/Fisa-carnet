@@ -36,15 +36,7 @@ jobs:
           mkdir -p android/app/src/main/assets/public
           cp -r dist/. android/app/src/main/assets/public/
           echo '[]' > android/app/src/main/assets/capacitor.plugins.json
-          echo '{
-            "Capacitor": {
-              "appId": "com.fisaslivica.app",
-              "appName": "Fisa Silvica",
-              "scheme": "https",
-              "hideLogs": false
-            },
-            "PluginHeaders": {}
-          }' > android/app/src/main/assets/capacitor.config.json
+          echo '{"Capacitor":{"appId":"com.fisaslivica.app","appName":"Fisa Silvica","scheme":"https","hideLogs":false},"PluginHeaders":{}}' > android/app/src/main/assets/capacitor.config.json
 
       - name: Create missing cordova variables file
         run: |
@@ -52,4 +44,9 @@ jobs:
           echo '' > android/capacitor-cordova-android-plugins/cordova.variables.gradle
 
       - name: Setup Java
-        uses: a
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Make gradle
