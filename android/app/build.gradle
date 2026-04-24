@@ -2,10 +2,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.fisa.silvica"
+    namespace "com.fisasilvica"
     compileSdkVersion 35
     defaultConfig {
-        applicationId "com.fisa.silvica"
+        applicationId "com.fisasilvica"
         minSdkVersion 23
         targetSdkVersion 35
         versionCode 1
