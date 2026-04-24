@@ -22,35 +22,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Capacitor CLI
+        run: npm install -g @capacitor/cli@5
+
       - name: Build web app
         run: npm run build
 
-      - name: Debug - verify dist and config
-        run: |
-          echo "=== dist contents ==="
-          ls -la dist/
-          echo "=== capacitor.config.json ==="
-          cat capacitor.config.json
-          echo "=== android/capacitor.config.json (if exists) ==="
-          cat android/capacitor.config.json 2>/dev/null || echo "not found"
+      - name: Remove old android folder
+        run: rm -rf android
 
-      - name: Sync Capacitor
-        run: |
-          mkdir -p android/app/src/main/assets/public
-          cp -r dist/* android/app/src/main/assets/public/
-          mkdir -p android/app/src/main/assets
-          echo '[]' > android/app/src/main/assets/capacitor.plugins.json
-          echo '{
-            "Capacitor": {
-              "appId": "com.fisasilvica.app",
-              "appName": "Fisa Silvica",
-              "scheme": "https",
-              "keyboardAppearanceDark": false,
-              "hideLogs": false,
-              "android": {}
-            },
-            "PluginHeaders": {}
-          }' > android/app/src/main/assets/capacitor.config.json
+      - name: Add Android platform fresh
+        run: npx cap add android
+
+      - name: Copy web assets
+        run: npx cap copy android
 
       - name: Setup Java
         uses: actions/setup-java@v4
