@@ -1,52 +1,28 @@
 name: Build Android APK
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build web app
-        run: npm run build
-
-      - name: Debug dist
-        run: |
-          cat dist/index.html
-          echo "---"
-          ls -la dist/
-
-      - name: Copy web assets to Android
-        run: |
-          mkdir -p android/app/src/main/assets/public
-          cp -r dist/. android/app/src/main/assets/public/
-          echo '[]' > android/app/src/main/assets/capacitor.plugins.json
-          echo '{"Capacitor":{"appId":"com.fisaslivica.app","appName":"Fisa Silvica","scheme":"https","hideLogs":false},"PluginHeaders":{}}' > android/app/src/main/assets/capacitor.config.json
-
-      - name: Create missing cordova variables file
-        run: |
-          mkdir -p android/capacitor-cordova-android-plugins
-          echo '' > android/capacitor-cordova-android-plugins/cordova.variables.gradle
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - run: npm ci
+      - run: npm run build
+      - run: cat dist/index.html
+      - run: mkdir -p android/app/src/main/assets/public && cp -r dist/. android/app/src/main/assets/public/
+      - run: mkdir -p android/capacitor-cordova-android-plugins && echo '' > android/capacitor-cordova-android-plugins/cordova.variables.gradle
+      - run: echo '{"Capacitor":{"appId":"com.fisaslivica.app","appName":"Fisa Silvica","scheme":"https"},"PluginHeaders":{}}' > android/app/src/main/assets/capacitor.config.json && echo '[]' > android/app/src/main/assets/capacitor.plugins.json
+      - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
-
-      - name: Make gradle
+      - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fisa-silvica-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
