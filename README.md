@@ -36,3 +36,5 @@ Aplicație web simplă pentru introducerea datelor despre arbori — utilă pent
 - `app.js` este încărcat cu `defer` pentru a nu bloca randarea
 - Service Worker cu cache-first pentru resursele statice
 - Meta `viewport` pentru randare mobilă optimă
+
+© 2026 [Feldiorean Bogdan]. All rights reserved
